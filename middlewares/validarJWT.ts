@@ -6,9 +6,9 @@ import Usuario,{IUser} from "../models/usuario";
 
 const validarJWT =async (req:Request, res:Response, next: NextFunction):Promise<void> => {
 
-    const token = req.headers["x-token"] as string;
+    const token = req.headers["x-token"] as string; 
 
-    if(!token){
+    if(!token){ 
         res.status(401).json({
             msg: "No hay token en la peticion"
         })
@@ -17,11 +17,11 @@ const validarJWT =async (req:Request, res:Response, next: NextFunction):Promise<
 
     try{
         const claveSecreta = process.env.CLAVESECRETA as string;
-        const payload = jwt.verify(token, claveSecreta) as JwtPayload;
+        const payload = jwt.verify(token, claveSecreta) as JwtPayload; 
 
         const {id} = payload;
 
-        const usuarioConfirmado: IUser | null = await Usuario.findById(id)
+        const usuarioConfirmado: IUser | null = await Usuario.findById(id) 
 
         if(!usuarioConfirmado){
             res.status(401).json({
@@ -30,7 +30,7 @@ const validarJWT =async (req:Request, res:Response, next: NextFunction):Promise<
             return;
         }
 
-        req.body.usuarioConfirmado = usuarioConfirmado
+        req.body.usuarioConfirmado = usuarioConfirmado 
 
         next()
     }catch(error){

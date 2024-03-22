@@ -7,6 +7,7 @@ import { login, register, verifyUser } from "../controllers/auth";
 
 const router = Router();
 
+
 router.post("/register",  [
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("email", "El email es obligatorio").isEmail(),
@@ -18,7 +19,6 @@ router.post("/register",  [
   ], register)
 
 
-  
   router.patch(
     "/verify",
     [

@@ -4,8 +4,8 @@ import { sendEmail } from "../mailer/mailer";
 export const existeEmail = async ( email: string): Promise<void> =>{
 
     const existeMail: IUser | null = await Usuario.findOne({email});
- 
-    if(existeMail && existeMail.verified){
+
+    if(existeMail && existeMail.verified){ 
         throw new Error(`El correo ${email} ya está registrado`)
     }
 

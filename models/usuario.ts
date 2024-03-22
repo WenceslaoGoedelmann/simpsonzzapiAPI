@@ -12,7 +12,6 @@ export interface IUser {
     code?: string;
     verified?:boolean;
 }
-
 const UserSchema = new Schema<IUser>({
     nombre:{
         type: String,

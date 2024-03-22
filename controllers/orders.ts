@@ -9,7 +9,7 @@ export const getOrdenes =async (req:Request, res:Response): Promise<void> => {
 
     const consulta = {user: usuarioId}
 
-    const orders = await Order.find(consulta)
+    const orders = await Order.find(consulta) 
 
     res.json({
         data: [ ...orders]
@@ -22,10 +22,10 @@ export const createOrder =async (req:Request, res:Response):Promise<void> => {
     const orderData: IOrder = req.body;
 
     const data = {
-        ...orderData,
-        user: usuarioId,
-        createdAt: new Date(),
-        status: "pending"
+        ...orderData, 
+        user: usuarioId, 
+        createdAt: new Date(), 
+        status: "pending" 
     }
 
     const order = new Order(data);

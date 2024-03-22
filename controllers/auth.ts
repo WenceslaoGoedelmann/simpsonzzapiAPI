@@ -6,65 +6,69 @@ import { ROLES } from "../helpers/constants";
 import { sendEmail } from "../mailer/mailer";
 import generarJWT from "../helpers/generarJWT";
 
+
+
 export const register =async (req:Request, res:Response):Promise<void> => {
 
-    const {nombre, email, password,cellphone,location,address }: IUser = req.body
-    
+    const {nombre, email, password,cellphone,location,address }: IUser = req.body 
+
     const usuario = new Usuario({nombre, email, password,cellphone,location,address })
 
-    const salt = bcryptjs.genSaltSync()
+    const salt = bcryptjs.genSaltSync() 
 
-    usuario.password = bcryptjs.hashSync(password, salt)
+    usuario.password = bcryptjs.hashSync(password, salt) 
 
-    const adminKey = req.headers["admin-key"]
+    const adminKey = req.headers["admin-key"] 
 
-    if(adminKey === process.env.KEYFORADMIN){
+    if(adminKey === process.env.KEYFORADMIN){ 
         usuario.rol = ROLES.admin   
     }
 
-    const newCode = randomstring.generate(6);
+    const newCode = randomstring.generate(6); 
 
-    usuario.code = newCode
+    usuario.code = newCode 
 
-    await usuario.save()
+    await usuario.save() 
 
-    await sendEmail(email, newCode)
+    await sendEmail(email, newCode) 
 
-    res.status(201).json({
+    res.status(201).json({ 
         usuario
     })
 
 }
 
+
 export const verifyUser =async (req:Request, res:Response):Promise<void> => {
-    const { email, code } = req.body
+    const { email, code } = req.body 
     
     try{
         const usuario = await Usuario.findOne({email})
 
-        if(!usuario){
+        if(!usuario){ 
             res.status(400).json({
                 msg: "No se encontró el email en la base de datos"
             })
             return
         }
 
-        if(usuario.verified){
+        if(usuario.verified){ 
             res.status(400).json({
                 msg: "El usuario está correctamente verificado"
             })
             return
         }
 
-        if(usuario.code !== code){
+        if(usuario.code !== code){ 
             res.status(401).json({
                 msg: "El código ingresado de incorrecto"
             })
             return
         }
-
+        
+        
         const usuarioActualizado = await Usuario.findOneAndUpdate({email},{verified: true})
-
+        
         res.status(200).json({
             msg: "Usuario verificado con éxito"
         })
@@ -77,13 +81,14 @@ export const verifyUser =async (req:Request, res:Response):Promise<void> => {
     }
 }
 
+
 export const login =async (req:Request, res: Response):Promise<void> => {
-    const {email, password }:IUser = req.body
+    const {email, password }:IUser = req.body 
 
     try{
-        const usuario = await Usuario.findOne({email})
+        const usuario = await Usuario.findOne({email}) 
 
-        if(!usuario){
+        if(!usuario){ 
             res.status(400).json({
                 msg: "No se encontró el email en la base de datos"
             });
@@ -99,9 +104,9 @@ export const login =async (req:Request, res: Response):Promise<void> => {
             return;
         }
 
-        const token = await generarJWT(usuario.id)
+        const token = await generarJWT(usuario.id) 
 
-        res.json({
+        res.json({ 
             usuario,
             token
         })
